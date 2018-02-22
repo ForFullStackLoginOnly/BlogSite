@@ -9,6 +9,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import { connect } from 'react-redux'
 import { createNotification } from'./reducers/notificationReducer'
+import { initializeUsers } from './reducers/userReducer'
 
 class App extends React.Component {
   constructor(props) {
@@ -23,6 +24,10 @@ class App extends React.Component {
       url: '',
       selectedBlog: null
     }
+  }
+
+  componentWillMount() {
+    this.props.initializeUsers()
   }
 
   compareLikes = (th, nd) => {
@@ -162,5 +167,5 @@ class App extends React.Component {
 
 export default connect(
   null,
-  {createNotification}
+  { createNotification, initializeUsers }
 )(App)
