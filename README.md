@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 # BlogSite
 This is project for FullStack course.
 It uses React frontend, Node backend and Mongoose Database
