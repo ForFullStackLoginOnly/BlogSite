@@ -1,3 +1,4 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # BlogSite
 This is project for FullStack course.
 It uses React frontend, Node backend and Mongoose Database
@@ -30,7 +31,7 @@ where you should replace `<port>` with wanted port number i.e. 3000.
 React page will be running in the adress: http://localhost:port/
 
 ## Use
-Default login information for application is
+Default login information
 ```
 username: 'jasperli'
 password: 'm134214test'
