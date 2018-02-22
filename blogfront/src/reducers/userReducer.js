@@ -7,7 +7,7 @@ const userReducer = (state = [], action) => {
     case 'INIT_USERS':
       return action.users
     case 'GET_USER':
-      return action.user  
+      return action.user
     default:
       return state
   }
@@ -36,11 +36,11 @@ export const createNew = (user) => {
 export const getOne = (id) => {
   return async (dispatch) => {
     const user = await userService.getOne(id)
+    dispatch({
+      type: 'GET_USER',
+      user
+    })
   }
-  dispatch({
-    type: 'GET_USER',
-    user
-  })
 }
 
 
