@@ -7,6 +7,8 @@ import BlogForm from './components/BlogForm'
 import LogoutForm from './components/LogoutForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import { connect } from 'react-redux'
+import { createNotification } from'./reducers/notificationReducer'
 
 class App extends React.Component {
   constructor(props) {
@@ -19,7 +21,6 @@ class App extends React.Component {
       author: '',
       title: '',
       url: '',
-      notification: null,
       selectedBlog: null
     }
   }
@@ -41,13 +42,6 @@ class App extends React.Component {
     }
   }
 
-  notify = (notification) => {
-    this.setState({ notification })
-    setTimeout(() => {
-      this.setState({ notification: null })
-    }, 3000)
-  }
-
   addBlog = async (event) => {
     try {
       event.preventDefault()
@@ -57,7 +51,7 @@ class App extends React.Component {
         url: this.state.url
       })
 
-      this.notify(`A new blog ${this.state.title} by ${this.state.author} added`)
+      this.props.createNotification({ message:`A new blog ${this.state.title} by ${this.state.author} added`})
 
       this.setState({
         title: '',
@@ -112,7 +106,7 @@ class App extends React.Component {
       })
 
     } catch (exception) {
-      this.notify(`Wrong username or password`)
+      this.props.createNotification({message: `Wrong username or password`})
       console.log(exception)
     }
   }
@@ -166,4 +160,7 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect(
+  null,
+  {createNotification}
+)(App)
