@@ -3,7 +3,7 @@
 This is project for FullStack course.
 It uses React frontend, Node backend and Mongoose Database
 
-Application can be found in heroku: https://pure-tor-70131.herokuapp.com/
+Application can be found in heroku: https://blog-heaven.herokuapp.com/
 ## Install 
 ```
 $ git clone https://github.com/NorthernLion/BlogSite.git
