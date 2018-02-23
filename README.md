@@ -33,6 +33,6 @@ React page will be running in the adress: http://localhost:port/
 ## Use
 Default login information
 ```
-username: 'jasperli'
-password: 'm134214test'
+username: 'testuser'
+password: 'test1234'
 ```
