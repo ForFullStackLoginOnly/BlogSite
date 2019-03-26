@@ -5,12 +5,12 @@
   "dependencies": {
     "axios": "^0.17.1",
     "prop-types": "^15.6.0",
-    "react": "^16.2.0",
+    "react": "^16.8.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-native-hyperlink": "0.0.12",
     "react-redux": "^5.0.7",
-    "react-scripts": "1.1.0",
+    "react-scripts": "^2.1.8",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.2.0"
@@ -22,7 +22,13 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1"
-  }
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

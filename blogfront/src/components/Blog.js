@@ -1,5 +1,5 @@
 import React from 'react'
-import blogService from '../services/blogs'
+import blogService from '../services/blog'
 import PropTypes from 'prop-types'
 
 class Blog extends React.Component {

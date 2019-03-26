@@ -1,6 +1,6 @@
 import React from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
+import blogService from './services/blog'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
@@ -8,71 +8,32 @@ import LogoutForm from './components/LogoutForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import { connect } from 'react-redux'
-import { createNotification } from'./reducers/notificationReducer'
+import { createNotification } from './reducers/notificationReducer'
 import { initializeUsers } from './reducers/userReducer'
+import { initializeBlogs } from './reducers/blogReducer'
+import { login, logout, loginFromToken } from './reducers/currentUserReducer'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      blogs: [],
       username: '',
       password: '',
-      user: null,
-      author: '',
-      title: '',
-      url: '',
-      selectedBlog: null
+      selectedBlog: null,
+      user: null
     }
   }
 
   componentWillMount() {
     this.props.initializeUsers()
+    this.props.initializeBlogs()
   }
 
-  compareLikes = (th, nd) => {
-    return nd.likes - th.likes
-  }
   componentDidMount() {
-    blogService
-      .getAll()
-      .then(blogs =>
-        this.setState({ blogs: blogs.sort(this.compareLikes) })
-      )
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      this.setState({ user })
-      blogService.setToken(user.token)
-    }
-  }
-
-  addBlog = async (event) => {
-    try {
-      event.preventDefault()
-      const newBlog = await blogService.create({
-        title: this.state.title,
-        author: this.state.author,
-        url: this.state.url
-      })
-
-      this.props.createNotification({ message:`A new blog ${this.state.title} by ${this.state.author} added`})
-
-      this.setState({
-        title: '',
-        author: '',
-        url: '',
-        blogs: this.state.blogs.concat(newBlog)
-      })
-
-
-    } catch (ex) {
-      this.setState({
-        error: `couldn't add new blog due to an error: ${ex}`
-      })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 3000)
+      this.props.loginFromToken(JSON.parse(loggedUserJSON))
+      blogService.setToken(JSON.parse(loggedUserJSON).token)
     }
   }
 
@@ -84,11 +45,7 @@ class App extends React.Component {
     event.preventDefault()
     try {
       window.localStorage.removeItem('loggedUser')
-      this.setState({
-        username: '',
-        password: '',
-        user: null
-      })
+      await this.props.logout
     } catch (exception) {
       console.log(exception)
     }
@@ -97,21 +54,16 @@ class App extends React.Component {
   login = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
+      const credentials = ({
         username: this.state.username,
         password: this.state.password
       })
+      await this.props.login(credentials)
 
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      this.setState({
-        username: '',
-        password: '',
-        user
-      })
-
+      window.localStorage.setItem('loggedUser', JSON.stringify(this.props.currentUser))
+      blogService.setToken(this.props.currentUser.token)
     } catch (exception) {
-      this.props.createNotification({message: `Wrong username or password`})
+      this.props.createNotification({ message: `Wrong username or password` })
       console.log(exception)
     }
   }
@@ -131,31 +83,20 @@ class App extends React.Component {
         onSubmit={this.logout}
       />
     )
-
-    const blogForm = () => (
-      <Togglable buttonLabel="create">
-        <BlogForm
-          onSubmit={this.addBlog}
-          title={this.state.title}
-          author={this.state.author}
-          url={this.state.url}
-          handleChange={this.handleChange}
-        />
-      </Togglable>
-    )
-
     return (
       <div>
-        <Notification message={this.state.notification} />
-        {this.state.user === null ?
+        <Notification message={this.props.notification} />
+        {this.props.currentUser === null ?
           loginForm() :
           <div>
-            <p>{this.state.user.name} logged in</p>
+            <p>{this.props.currentUser.name} logged in</p>
             {logoutForm()}
-            {blogForm()}
+            <Togglable buttonLabel="create">
+              <BlogForm />
+            </Togglable>
             <h2>blogs</h2>
-            {this.state.blogs.map(blog =>
-              <Blog key={blog._id} blog={blog} user={this.state.user} />
+            {this.props.blogs.map(blog =>
+              <Blog key={blog._id} blog={blog} user={this.props.currentUser} />
             )}
           </div>
 
@@ -163,9 +104,18 @@ class App extends React.Component {
       </div>
     )
   }
+
+}
+
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogs,
+    notification: state.notification,
+    currentUser: state.currentUser
+  }
 }
 
 export default connect(
-  null,
-  { createNotification, initializeUsers }
+  mapStateToProps,
+  { createNotification, initializeUsers, initializeBlogs, login, logout, loginFromToken }
 )(App)
