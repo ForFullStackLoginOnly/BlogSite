@@ -1,10 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { selectUser } from '../reducers/selectedUserReducer'
+import UserPage from './UserPage'
 
 const UsersList = (props) => {
 
   if (!props.show) {
     return null
+  }
+
+  if (props.selectedUser) {
+    return <UserPage/>
+  }
+
+  const selectUserHandler = async (user) => {
+    await props.selectUser(user)
   }
 
   return (
@@ -16,8 +26,8 @@ const UsersList = (props) => {
           <th>blogs created</th>
         </tr>
         {props.users.map(u =>
-          <tr key={u.id}>
-            <td>{u.username}</td>
+          <tr key={u._id}>
+            <a onClick={() => selectUserHandler(u)}>{u.username}</a>
             <td>{u.name}</td>
             <td>{u.blogs.length}</td>
           </tr>
@@ -29,13 +39,14 @@ const UsersList = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users
+    users: state.users,
+    selectedUser: state.selectedUser
   }
 }
 
 export default connect(
   mapStateToProps,
-  null
+  { selectUser }
 )(UsersList)
 
 

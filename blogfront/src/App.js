@@ -14,6 +14,7 @@ import { createNotification } from './reducers/notificationReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout, loginFromToken } from './reducers/currentUserReducer'
+import { unSelectUser } from './reducers/selectedUserReducer'
 
 class App extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class App extends React.Component {
   }
 
   handleButtonChange = (newPage) => {
+    this.props.unSelectUser()
     this.setState({ page: newPage })
   }
 
@@ -119,5 +121,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { createNotification, initializeUsers, initializeBlogs, login, logout, loginFromToken }
+  { createNotification, initializeUsers, initializeBlogs, login, logout, loginFromToken, unSelectUser }
 )(App)
