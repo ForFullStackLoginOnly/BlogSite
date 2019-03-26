@@ -2,6 +2,7 @@ import React from 'react'
 import blogService from '../services/blog'
 import { connect } from 'react-redux'
 import { selectBlog } from '../reducers/selectedBlogReducer'
+import { Table } from 'semantic-ui-react'
 
 
 class Blog extends React.Component {
@@ -77,18 +78,20 @@ class Blog extends React.Component {
     }
 
     return (
-      <div style={blogStyle} className="everything">
-        <div className="authorAndTitle" onClick={this.toggleVisibility}>Show</div>
-        <tr key={this.props.blog._id}>
-          <a onClick={() => this.selectBlogHandler(this.props.blog)}>{this.props.blog.author}  {this.props.blog.title}</a>
-        </tr>
-        <div className="togglableContent" style={showWhenVisible}>
-          <a href={this.props.blog.url}>{this.props.blog.url}</a>
-          <p>{this.props.blog.likes} likes <button onClick={this.addLike}>like</button></p>
-          <p>added by {this.props.blog.user.name}</p>
-          <DeleteButton />
+      <Table>
+        <div style={blogStyle} className="everything">
+          <div className="authorAndTitle" onClick={this.toggleVisibility}>Show</div>
+          <tr key={this.props.blog._id}>
+            <a onClick={() => this.selectBlogHandler(this.props.blog)}>{this.props.blog.author}  {this.props.blog.title}</a>
+          </tr>
+          <div className="togglableContent" style={showWhenVisible}>
+            <a href={this.props.blog.url}>{this.props.blog.url}</a>
+            <p>{this.props.blog.likes} likes <button onClick={this.addLike}>like</button></p>
+            <p>added by {this.props.blog.user.name}</p>
+            <DeleteButton />
+          </div>
         </div>
-      </div>
+      </Table>
     )
   }
 }

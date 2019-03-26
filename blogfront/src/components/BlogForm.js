@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Form } from 'semantic-ui-react'
 
 import { createNewBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
@@ -52,36 +53,33 @@ class BlogForm extends React.Component {
       <div>
         <h2>Create new Blog</h2>
 
-        <form onSubmit={this.addBlog}>
-          <div>
-            title
+        <Form onSubmit={this.addBlog}>
+          <Form.Input label="title">
           <input
               type="text"
               name="title"
               value={this.state.title}
               onChange={({ target }) => this.setState({ title: target.value })}
             />
-          </div>
-          <div>
-            author
+          </Form.Input>
+          <Form.Input label="author">
           <input
               type="text"
               name="author"
               value={this.state.author}
               onChange={({ target }) => this.setState({ author: target.value })}
             />
-          </div>
-          <div>
-            url
+          </Form.Input>
+          <Form.Input label="url">
           <input
               type="text"
               name="url"
               value={this.state.url}
               onChange={({ target }) => this.setState({ url: target.value })}
             />
-          </div>
-          <button>create</button>
-        </form>
+          </Form.Input>
+          <Form.Button type='submit'>create</Form.Button>
+        </Form>
       </div >
     )
   }

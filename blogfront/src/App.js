@@ -1,4 +1,7 @@
 import React from 'react'
+import { Container } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
+
 
 import blogService from './services/blog'
 
@@ -89,20 +92,21 @@ class App extends React.Component {
     )
 
     return (
-      <div>
+      <Container>
         <Notification message={this.props.notification} />
         {this.props.currentUser === null
           ? loginForm()
           : <div>
-            <div>
-              <p>{this.props.currentUser.name} logged in</p>
-              <button onClick={() => this.handleButtonChange('blogs')}>blogs</button>
-              <button onClick={() => this.handleButtonChange('users')}>users</button>
-              {logoutForm()}
-            </div>
+            <Menu>
+              <Menu.Item onClick={() => this.handleButtonChange('blogs')}>blogs</Menu.Item >
+              <Menu.Item onClick={() => this.handleButtonChange('users')}>users</Menu.Item >
+              <Menu.Item>{this.props.currentUser.name} logged in</Menu.Item>
+              <Menu.Item>{logoutForm()}</Menu.Item>
+            </Menu>
+            {!this.props.selectedBlog && this.state.page === 'blogs' &&                
             <Togglable buttonLabel="create">
               <BlogForm />
-            </Togglable>
+            </Togglable>}
             {this.props.selectedBlog === null
               ? <BlogList show={this.state.page === 'blogs'} blogs={this.props.blogs} currentUser={this.props.currentUser} />
               : <SimpleBlog onClick={this.addLike} />
@@ -110,7 +114,7 @@ class App extends React.Component {
             <UserList show={this.state.page === 'users'} />
           </div>
         }
-      </div>
+      </Container>
     )
   }
 

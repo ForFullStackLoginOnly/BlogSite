@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectUser } from '../reducers/selectedUserReducer'
 import UserPage from './UserPage'
+import { Table } from 'semantic-ui-react'
 
 const UsersList = (props) => {
 
@@ -18,22 +19,22 @@ const UsersList = (props) => {
   }
 
   return (
-    <table>
-      <tbody>
+    <Table striped celled>
+      <Table.Body>
         <tr>
           <th>username</th>
           <th>name</th>
           <th>blogs created</th>
         </tr>
         {props.users.map(u =>
-          <tr key={u._id}>
-            <a onClick={() => selectUserHandler(u)}>{u.username}</a>
-            <td>{u.name}</td>
-            <td>{u.blogs.length}</td>
-          </tr>
+          <Table.Row key={u._id}>
+            <Table.Cell><a onClick={() => selectUserHandler(u)}>{u.username}</a></Table.Cell>
+            <Table.Cell>{u.name}</Table.Cell>
+            <Table.Cell>{u.blogs.length}</Table.Cell>
+          </Table.Row>
         )}
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
   )
 }
 
