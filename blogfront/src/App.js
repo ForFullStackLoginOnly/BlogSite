@@ -1,12 +1,14 @@
 import React from 'react'
-import Blog from './components/Blog'
+
 import blogService from './services/blog'
-import loginService from './services/login'
+
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LogoutForm from './components/LogoutForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import BlogList from './components/BlogList'
+import UserList from './components/UsersList'
 import { connect } from 'react-redux'
 import { createNotification } from './reducers/notificationReducer'
 import { initializeUsers } from './reducers/userReducer'
@@ -20,7 +22,8 @@ class App extends React.Component {
       username: '',
       password: '',
       selectedBlog: null,
-      user: null
+      user: null,
+      page: 'blogs'
     }
   }
 
@@ -41,15 +44,10 @@ class App extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  logout = async (event) => {
-    event.preventDefault()
-    try {
-      window.localStorage.removeItem('loggedUser')
-      await this.props.logout
-    } catch (exception) {
-      console.log(exception)
-    }
+  handleButtonChange = (newPage) => {
+    this.setState({ page: newPage })
   }
+
 
   login = async (event) => {
     event.preventDefault()
@@ -83,21 +81,25 @@ class App extends React.Component {
         onSubmit={this.logout}
       />
     )
+
     return (
       <div>
         <Notification message={this.props.notification} />
-        {this.props.currentUser === null ?
-          loginForm() :
-          <div>
-            <p>{this.props.currentUser.name} logged in</p>
-            {logoutForm()}
+        {this.props.currentUser === null
+          ? loginForm()
+          : <div>
+            <div>
+              <p>{this.props.currentUser.name} logged in</p>
+              <button onClick={() => this.handleButtonChange('blogs')}>blogs</button>
+              <button onClick={() => this.handleButtonChange('users')}>users</button>
+              {logoutForm()}
+            </div>
             <Togglable buttonLabel="create">
               <BlogForm />
             </Togglable>
-            <h2>blogs</h2>
-            {this.props.blogs.map(blog =>
-              <Blog key={blog._id} blog={blog} user={this.props.currentUser} />
-            )}
+            <BlogList show={this.state.page === 'blogs'} blogs={this.props.blogs} currentUser={this.props.currentUser} />
+            <UserList show={this.state.page === 'users'} />
+
           </div>
 
         }

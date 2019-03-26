@@ -4,6 +4,8 @@ const currentUserReducer = (state = null, action) => {
   switch (action.type) {
     case 'LOGIN':
       return action.currentUser
+    case 'LOGINCRED':
+      return action.currentUser
     case 'LOGOUT':
       return null
     default:
@@ -26,7 +28,7 @@ export const login = (creadentials) => {
 export const loginFromToken = (currentUser) => {
   return async dispatch => {
     dispatch({
-      type: 'LOGIN',
+      type: 'LOGINCRED',
       currentUser
     })
   }
