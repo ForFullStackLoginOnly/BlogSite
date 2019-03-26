@@ -1,15 +1,25 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
-const SimpleBlog = ({ blog, onclick }) => (
+const SimpleBlog = (props) => (
   <div>
     <div className="titleAndAuthor">
-      {blog.title} {blog.author}
+      {props.selectedBlog.title} {props.selectedBlog.author}
     </div>
     <div className="likes">
-      blog has {blog.likes} likes
-      <button onClick={onclick}>likes</button>
+      blog has {props.selectedBlog.likes} likes
+      <button onClick={props.onclick}>likes</button>
     </div>
   </div>
 )
 
-export default SimpleBlog
+const mapStateToProps = (state) => {
+  return {
+    selectedBlog: state.selectedBlog
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(SimpleBlog)

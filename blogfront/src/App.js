@@ -9,12 +9,15 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogList from './components/BlogList'
 import UserList from './components/UsersList'
+import SimpleBlog from './components/SimpleBlog'
+
 import { connect } from 'react-redux'
 import { createNotification } from './reducers/notificationReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout, loginFromToken } from './reducers/currentUserReducer'
 import { unSelectUser } from './reducers/selectedUserReducer'
+import { unSelectBlog } from './reducers/selectedBlogReducer'
 
 class App extends React.Component {
   constructor(props) {
@@ -47,7 +50,8 @@ class App extends React.Component {
 
   handleButtonChange = (newPage) => {
     this.props.unSelectUser()
-    this.setState({ page: newPage })
+    this.props.unSelectBlog()
+    this.setState({ page: newPage })
   }
 
 
@@ -99,11 +103,12 @@ class App extends React.Component {
             <Togglable buttonLabel="create">
               <BlogForm />
             </Togglable>
-            <BlogList show={this.state.page === 'blogs'} blogs={this.props.blogs} currentUser={this.props.currentUser} />
+            {this.props.selectedBlog === null
+              ? <BlogList show={this.state.page === 'blogs'} blogs={this.props.blogs} currentUser={this.props.currentUser} />
+              : <SimpleBlog onClick={this.addLike} />
+            }
             <UserList show={this.state.page === 'users'} />
-
           </div>
-
         }
       </div>
     )
@@ -115,11 +120,12 @@ const mapStateToProps = (state) => {
   return {
     blogs: state.blogs,
     notification: state.notification,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    selectedBlog: state.selectedBlog
   }
 }
 
 export default connect(
   mapStateToProps,
-  { createNotification, initializeUsers, initializeBlogs, login, logout, loginFromToken, unSelectUser }
+  { createNotification, initializeUsers, initializeBlogs, login, logout, loginFromToken, unSelectUser, unSelectBlog }
 )(App)

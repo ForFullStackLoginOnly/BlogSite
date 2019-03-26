@@ -25,7 +25,7 @@ export const createNewBlog = (blog) => {
   return async (dispatch) => {
     const newBlog = await blogService.create(blog)
     dispatch({
-      type: 'NEW_NOTE',
+      type: 'NEW_BLOG',
       blog: newBlog
     })
   }

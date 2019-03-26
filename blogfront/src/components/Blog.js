@@ -1,6 +1,8 @@
 import React from 'react'
 import blogService from '../services/blog'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { selectBlog } from '../reducers/selectedBlogReducer'
+
 
 class Blog extends React.Component {
   constructor(props) {
@@ -44,8 +46,12 @@ class Blog extends React.Component {
     }
   }
 
-  render() {
+  selectBlogHandler = async (blog) => {
+    console.log('bloggerino', blog)
+    await this.props.selectBlog(blog)
+  }
 
+  render() {
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
 
     const blogStyle = {
@@ -56,9 +62,7 @@ class Blog extends React.Component {
       marginBottom: 5
     }
     const DeleteButton = () => {
-      console.log(this.props.user.username)
-      console.log(this.props.blog.user.username)
-      if (this.props.user.username === this.props.blog.user.username || !this.props.blog.user.username) {
+      if (this.props.currentUser.username === this.props.blog.user.username || !this.props.blog.user.username) {
         return (
           <div>
             <button onClick={this.deleteBlog}>delete</button>
@@ -72,11 +76,12 @@ class Blog extends React.Component {
       )
     }
 
-
-
     return (
       <div style={blogStyle} className="everything">
-        <div className="authorAndTitle" onClick={this.toggleVisibility}>{this.props.blog.title} {this.props.blog.author}</div>
+        <div className="authorAndTitle" onClick={this.toggleVisibility}>Show</div>
+        <tr key={this.props.blog._id}>
+          <a onClick={() => this.selectBlogHandler(this.props.blog)}>{this.props.blog.author}  {this.props.blog.title}</a>
+        </tr>
         <div className="togglableContent" style={showWhenVisible}>
           <a href={this.props.blog.url}>{this.props.blog.url}</a>
           <p>{this.props.blog.likes} likes <button onClick={this.addLike}>like</button></p>
@@ -87,4 +92,15 @@ class Blog extends React.Component {
     )
   }
 }
-export default Blog
+
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.currentUser,
+    selectedBlog: state.selectedBlog
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { selectBlog }
+)(Blog)
